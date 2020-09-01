@@ -9,7 +9,7 @@ impl CPU {
             let new_value = self.add(value);
             self.registers.a = new_value;
           }
-          _ => { /* TODO: support more targets */ }
+          _ => { /* TODO: plus de cibles */ }
         }
       },
 
@@ -31,12 +31,12 @@ impl CPU {
               LoadByteSource::A => self.registers.a,
               LoadByteSource::D8 => self.read_next_byte(),
               LoadByteSource::HLI => self.bus.read_byte(self.registers.get_hl()),
-              _ => { panic!("TODO: implement other sources") }
+              _ => { panic!("TODO: implémentation d'autres sources") }
             };
             match target {
               LoadByteTarget::A => self.registers.a = source_value,
               LoadByteTarget::HLI => self.bus.write_byte(self.registers.get_hl(), source_value),
-              _ => { panic!("TODO: implement other targets") }
+              _ => { panic!("TODO: implémentation de plus de cibles") }
             };
             match source {
               LoadByteSource::D8  => self.pc.wrapping_add(2),
@@ -50,7 +50,7 @@ impl CPU {
       Instruction::PUSH(target) => {
         let value = match target {
           StackTarget::BC => self.registers.get_bc(),
-          _ => { panic!("TODO: support more targets") }
+          _ => { panic!("TODO: support de plus de cibles") }
         };
         self.push(value);
         self.pc.wrapping_add(1);
@@ -76,7 +76,7 @@ impl CPU {
     let next_pc = if let Some(instruction) = Instruction::from_byte(instruction_byte) {
       self.execute(instruction)
     } else {
-      panic!("Unkown instruction found for: 0x{:x}", instruction_byte);
+      panic!("Instruction inconnue trouvée pour: 0x{:x}", instruction_byte);
     };
 
     self.pc = next_pc;
